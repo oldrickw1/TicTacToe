@@ -1,7 +1,9 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Board {
-    private Mark[] marks;
     private final ArrayList<HashSet<Integer>> WINNING_COMBINATIONS = new ArrayList<>(List.of(
             new HashSet<>(Set.of(0, 1, 2)),
             new HashSet<>(Set.of(3, 4, 5)),
@@ -12,30 +14,27 @@ public class Board {
             new HashSet<>(Set.of(0, 4, 8)),
             new HashSet<>(Set.of(2, 4, 6))
     ));
-
+    private final Mark[] board;
 
 
     public Board() {
-        marks = new Mark[9];
+        board = new Mark[9];
     }
 
-    public void addMark(Mark mark, int cellNumber) {
-        if (marks[cellNumber] != null || invalidCellNumber(cellNumber)) {
+    public void addMark(Mark mark, int squareNumber) {
+        if (board[squareNumber] != null) {
             throw new IllegalStateException("Already a mark here");
         } else {
-            marks[cellNumber] = mark;
+            board[squareNumber] = mark;
         }
     }
 
-    private boolean invalidCellNumber(int n) {
-        return (n < 0 || n > 8);
-    }
 
 
     public int checkIfGameOver() {
-        if (checkIfSomeoneHasWon(MarkType.X)) {
+        if (checkIfSomeoneHasWon(Mark.MarkType.X)) {
             return 1;
-        } else if (checkIfSomeoneHasWon(MarkType.O)) {
+        } else if (checkIfSomeoneHasWon(Mark.MarkType.O)) {
             return 2;
         } else if (isTie()) {
             return 3;
@@ -44,25 +43,25 @@ public class Board {
         }
     }
 
-
     private boolean isTie() {
+        boolean boardIsFull = true;
         for (int i = 0; i < 9; i++) {
-            if (marks[i] == null) {
-                return false;
+            if (board[i] == null) {
+                boardIsFull = false;
+                break;
             }
         }
-        return true;
+        return boardIsFull;
     }
 
-    private boolean checkIfSomeoneHasWon(MarkType markType) {
+    private boolean checkIfSomeoneHasWon(Mark.MarkType markType) {
         Set<Integer> set = new HashSet<>();
         for (int i = 0; i < 9; i++) {
-            if (marks[i] != null && marks[i].getType() == markType) {
+            if (board[i] != null && board[i].getMarkType() == markType) {
                 set.add(i);
             }
         }
-        System.out.println("The set of " + markType + "'s " + set.toString());
-        return containsSubSet(WINNING_COMBINATIONS,set);
+        return containsSubSet(WINNING_COMBINATIONS, set);
     }
 
     public boolean containsSubSet(ArrayList<HashSet<Integer>> list, Set<Integer> targetSet) {
@@ -74,8 +73,8 @@ public class Board {
         return false;
     }
 
-    public Mark[] getMarks() {
-        return marks;
+    public Mark[] getBoard() {
+        return board;
     }
 }
 

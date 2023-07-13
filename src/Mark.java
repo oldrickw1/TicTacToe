@@ -1,21 +1,28 @@
 public class Mark {
-    private MarkType type;
-    private String imagePath;
+    private final MarkType type;
 
     public Mark(MarkType type) {
         this.type = type;
-        if (type == MarkType.O) {
-            imagePath = "Resources/o_small.png";
-        } else if (type == MarkType.X) {
-            imagePath = "Resources/x_small.png";
-        }
     }
 
-    public MarkType getType() {
+    public MarkType getMarkType() {
         return type;
     }
 
-    public String getImagePath() {
-        return imagePath;
+
+    public enum MarkType {
+        X("Resources/o_small.png"),
+        O("Resources/x_small.png");
+
+        private final String pathToIcon;
+
+        MarkType(String pathToIcon) {
+            this.pathToIcon = pathToIcon;
+        }
+
+        public String getPathToIcon() {
+            return pathToIcon;
+        }
     }
+
 }

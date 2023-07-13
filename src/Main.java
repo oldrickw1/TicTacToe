@@ -5,8 +5,5 @@ public class Main {
         TicTacToeController controller = new TicTacToeController(theModel,theView);
 
         controller.run();
-
-
-
     }
 }

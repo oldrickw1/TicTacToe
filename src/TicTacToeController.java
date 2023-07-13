@@ -1,17 +1,16 @@
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class TicTacToeController {
     private Board theModel;
     private TicTacToeView theView;
-    private AI ai;
+    private Opponent opponent;
     private boolean myTurn;
 
     public TicTacToeController(Board theModel, TicTacToeView theView) {
         this.theModel = theModel;
         this.theView = theView;
-        this.ai = new AI();
+        this.opponent = new NaiveOpponent();
         myTurn = true;
     }
 
@@ -20,28 +19,28 @@ public class TicTacToeController {
         theView.setVisible(true);
     }
 
-
     ActionListener buttonListener = (e -> {
         Square square = (Square) e.getSource();
 
         try {
-            // Preventing player from making another move before opponent has made one
+            // player's turn
+            // Preventing player from making another move before opponent has made one. Not happy with this approach..
             if (!myTurn) {
-                System.out.println("Await your turn!");
                 return;
             }
-            // my turn
-            theModel.addMark(new Mark(MarkType.X), square.getCellNumber());
+            theModel.addMark(new Mark(Mark.MarkType.X), square.getPosition());
             myTurn = false;
-            if (updateAndCheckIfGameOver()) {
-                myTurn = true;
+            theView.updateBoard(theModel.getBoard());
+            if (checkIfGameOver()) {
+                resetGame();
                 return;
             }
             // opponent's turn
             Timer timer = new Timer(1500, event -> {
-                theModel.addMark(new Mark(MarkType.O), ai.makeRandomChoice(theModel.getMarks()));
-                if (updateAndCheckIfGameOver()) {
-                    myTurn = true;
+                theModel.addMark(new Mark(Mark.MarkType.O), opponent.makeChoice(theModel.getBoard()));
+                theView.updateBoard(theModel.getBoard());
+                if (checkIfGameOver()) {
+                    resetGame();
                     return;
                 }
                 myTurn = true;
@@ -49,39 +48,34 @@ public class TicTacToeController {
             timer.setRepeats(false);
             timer.start();
 
-
         } catch (IllegalStateException exception) {
-            theView.displayMessage("Illegal step");
+            theView.displayMessage("Illegal move");
         }
-
     });
 
-    private boolean updateAndCheckIfGameOver() {
-        theView.updateBoard(theModel.getMarks());
+
+    private boolean checkIfGameOver() {
         int rc = theModel.checkIfGameOver();
         switch (rc) {
             case 1 -> {
                 theView.displayMessage("You win!");
-                theModel = new Board();
-                theView.updateBoard(theModel.getMarks());
                 return true;
             }
             case 2 -> {
                 theView.displayMessage("You lose!");
-                theModel = new Board();
-                theView.updateBoard(theModel.getMarks());
                 return true;
             }
             case 3 -> {
                 theView.displayMessage("Tie!");
-                theModel = new Board();
-                theView.updateBoard(theModel.getMarks());
                 return true;
             }
         }
         return false;
     }
 
-
-
+    private void resetGame() {
+        theModel = new Board();
+        theView.updateBoard(theModel.getBoard());
+        myTurn = true;
+    }
 }

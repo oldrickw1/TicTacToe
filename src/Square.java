@@ -1,13 +1,13 @@
 import javax.swing.*;
 
 public class Square extends JButton {
-    private int cellNumber;
+    private final int position;
 
-    public Square(int cellNumber) {
-        this.cellNumber = cellNumber;
+    public Square(int squareNumber) {
+        this.position = squareNumber;
     }
 
-    public int getCellNumber() {
-        return cellNumber;
+    public int getPosition() {
+        return position;
     }
 }
