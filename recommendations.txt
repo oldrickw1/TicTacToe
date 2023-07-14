@@ -10,7 +10,7 @@ Model (Board) Class:
 
 Magic Numbers: Instead of using hardcoded numbers in the checkIfSomeoneHasWon() method, you could define constants to represent the board size or the winning combinations. This can improve the code's clarity and make it easier to modify if the board size changes.
 isTie(): The implementation of isTie() can be simplified by using the Arrays class from the Java standard library. You can check if any element in the board array is null using Arrays.asList(board).contains(null).
-View (TicTacToeView) Class:
+View (GUI) Class:
 
 Squares: Instead of storing the squares array separately, you can directly retrieve the squares from the view's container using methods like getComponent() or getComponents(). This way, you don't need to maintain a separate array for squares.
 General Suggestions:
