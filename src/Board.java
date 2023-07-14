@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Board {
+    private final int SQUARES_IN_BOARD = 9;
     private final ArrayList<HashSet<Integer>> WINNING_COMBINATIONS = new ArrayList<>(List.of(
             new HashSet<>(Set.of(0, 1, 2)),
             new HashSet<>(Set.of(3, 4, 5)),
@@ -15,6 +13,8 @@ public class Board {
             new HashSet<>(Set.of(2, 4, 6))
     ));
     private final Mark[] board;
+    private final Set<Integer> xSet = new HashSet();
+    private final Set<Integer> oSet = new HashSet();
 
 
     public Board() {
@@ -29,8 +29,6 @@ public class Board {
         }
     }
 
-
-
     public int checkIfGameOver() {
         if (checkIfSomeoneHasWon(Mark.MarkType.X)) {
             return 1;
@@ -44,15 +42,9 @@ public class Board {
     }
 
     private boolean isTie() {
-        boolean boardIsFull = true;
-        for (int i = 0; i < 9; i++) {
-            if (board[i] == null) {
-                boardIsFull = false;
-                break;
-            }
-        }
-        return boardIsFull;
+        return (!Arrays.asList(board).contains(null));
     }
+
 
     private boolean checkIfSomeoneHasWon(Mark.MarkType markType) {
         Set<Integer> set = new HashSet<>();

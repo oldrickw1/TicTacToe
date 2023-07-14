@@ -1,0 +1,25 @@
+Thank you for sharing your Tic-Tac-Toe game code! I've reviewed it and provided some feedback below.
+
+Controller Class:
+
+ButtonListener: You mentioned that the ButtonListener has a lot of duplicate code. One approach to reduce duplication is to extract common logic into separate methods. For example, you can create a method for processing the player's move and another method for processing the opponent's move. This way, you can eliminate code repetition and improve the readability of the ActionListener.
+Handling Turns: Instead of using a boolean flag (myTurn) to control turns, you could consider using an enumeration (e.g., PlayerTurn) to represent the current turn. This can make the code more expressive and self-explanatory.
+checkIfGameOver(): The switch/case statement used in this method can be replaced with a more straightforward if/else if structure, which can be easier to read and understand.
+Resetting the Game: In the resetGame() method, instead of creating a new instance of the Board, you can consider clearing the existing board by resetting all its elements to null. This way, you avoid unnecessary object creation.
+Model (Board) Class:
+
+Magic Numbers: Instead of using hardcoded numbers in the checkIfSomeoneHasWon() method, you could define constants to represent the board size or the winning combinations. This can improve the code's clarity and make it easier to modify if the board size changes.
+isTie(): The implementation of isTie() can be simplified by using the Arrays class from the Java standard library. You can check if any element in the board array is null using Arrays.asList(board).contains(null).
+View (TicTacToeView) Class:
+
+Squares: Instead of storing the squares array separately, you can directly retrieve the squares from the view's container using methods like getComponent() or getComponents(). This way, you don't need to maintain a separate array for squares.
+General Suggestions:
+
+Separation of Concerns: Consider separating the game logic from the graphical user interface (GUI) components by employing the Model-View-Controller (MVC) design pattern more strictly. This can enhance the maintainability and testability of your code.
+Code Organization: You can organize your code into packages or separate files based on their responsibilities to improve modularity and readability.
+Error Handling: Provide more informative error messages or handle exceptional cases more gracefully, especially in the case of unexpected input or errors.
+Overall, your code is well-structured and readable. The suggestions above can help you further improve the code's quality and maintainability. Keep up the good work!
+
+
+
+
