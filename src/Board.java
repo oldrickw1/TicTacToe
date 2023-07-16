@@ -16,8 +16,6 @@ public class Board {
     private final Cell[] board;
     private final Set<Integer> crossSet = new HashSet<>();
     private final Set<Integer> noughtSet = new HashSet<>();
-    private GameStatus gameStatus = GameStatus.RUNNING;
-
 
     public Board() {
         board = new Cell[SQUARES_IN_BOARD];
@@ -43,18 +41,15 @@ public class Board {
         }
     }
 
-    public boolean checkIfGameOverAndSetStatus() {
+    public GameStatus checkIfGameOver() {
         if (checkIfWinner(Cell.CROSS)) {
-            gameStatus = GameStatus.CROSS_WINS;
-            return true;
+            return GameStatus.CROSS_WINS;
         } else if (checkIfWinner(Cell.NOUGHT)) {
-            gameStatus = GameStatus.NOUGHT_WINS;
-            return true;
+            return GameStatus.NOUGHT_WINS;
         } else if (isTie()) {
-            gameStatus = GameStatus.TIE;
-            return true;
+            return GameStatus.TIE;
         } else {
-            return false;
+            return GameStatus.RUNNING;
         }
     }
 
@@ -74,9 +69,6 @@ public class Board {
         return board;
     }
 
-    public GameStatus getGameStatus() {
-        return gameStatus;
-    }
 
     public enum GameStatus {
         RUNNING(null),
