@@ -1,2 +1,3 @@
-package PACKAGE_NAME;public interface Controller {
+public interface Controller {
+    void handleBoardClick(int position);
 }

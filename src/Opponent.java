@@ -1,3 +1,3 @@
 public interface Opponent {
-    public int makeChoice(Mark[] marks);
+    public int makeChoice(Cell[] board);
 }

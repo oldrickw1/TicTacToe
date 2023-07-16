@@ -1,23 +1,30 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class GUI extends JFrame {
-    private final Square[] squares = new Square[Board.SQUARES_IN_BOARD]; // a square is a JButton with a number that indicates position.
+public class GUI extends JFrame implements ActionListener{
+    private final JButton[] squares = new JButton[Board.SQUARES_IN_BOARD];
+    private final Controller controller;
 
-    public GUI() {
+    public GUI(Controller controller) {
+        this.controller = controller;
         setName("Tic-Tac-Toe");
         setSize(300, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(3, 3));
+        setButtons();
     }
 
-    public void setSquares(ActionListener buttonListener) {
+    public void setButtons() {
         for (int i = 0; i < Board.SQUARES_IN_BOARD; i++) {
-            Square square = new Square(i);
-            square.addActionListener(buttonListener);
-            squares[i] = square;
-            add(square);
+            JButton btn = new JButton();
+            btn.setFocusable(false);
+            btn.setFont(new Font("Arial", Font.BOLD, 60));
+            btn.setActionCommand(Integer.toString(i));
+            btn.addActionListener(this);
+            squares[i] = btn;
+            add(btn);
         }
     }
 
@@ -25,14 +32,19 @@ public class GUI extends JFrame {
         JOptionPane.showMessageDialog(this, message);
     }
 
-    public void updateBoard(Mark[] marks) {
+    public void updateBoard(Cell[] marks) {
         for (int i = 0; i < Board.SQUARES_IN_BOARD; i++) {
-            if (marks[i] != null) {
-                String path = marks[i].getMarkType().getPathToIcon();
-                squares[i].setIcon(new ImageIcon(path));
-            } else {
-                squares[i].setIcon(null); // for resetting after a game.
+            switch (marks[i]) {
+                case CROSS -> squares[i].setText("X");
+                case NOUGHT -> squares[i].setText("O");
+                case EMPTY -> squares[i].setText("");
             }
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        int position = Integer.parseInt(e.getActionCommand());
+        controller.handleBoardClick(position);
     }
 }

@@ -8,10 +8,10 @@ public class NaiveOpponent implements Opponent{
         rand = new Random();
     }
 
-    public int makeChoice(Mark[] marks) {
+    public int makeChoice(Cell[] board) {
         ArrayList<Integer> openSquares = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            if (marks[i] == null) {
+            if (board[i] == Cell.EMPTY) {
                 openSquares.add(i);
             }
         }

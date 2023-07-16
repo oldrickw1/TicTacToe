@@ -12,39 +12,43 @@ public class Board {
             new HashSet<>(Set.of(0, 4, 8)),
             new HashSet<>(Set.of(2, 4, 6))
     ));
-    private final Mark[] board;
-    private final Set<Integer> xSet = new HashSet<>();
-    private final Set<Integer> oSet = new HashSet<>();
+
+    private final Cell[] board;
+    private final Set<Integer> crossSet = new HashSet<>();
+    private final Set<Integer> noughtSet = new HashSet<>();
     private GameStatus gameStatus = GameStatus.RUNNING;
 
 
     public Board() {
-        board = new Mark[SQUARES_IN_BOARD];
-    }
-
-    public void addMark(Mark mark, int position) {
-        if (board[position] != null) {
-            throw new IllegalStateException("Already a mark here");
-        } else {
-            updatePlayerState(mark, position);
-            board[position] = mark;
+        board = new Cell[SQUARES_IN_BOARD];
+        for (int i = 0; i < SQUARES_IN_BOARD; i++) {
+            board[i] = Cell.EMPTY;
         }
     }
 
-    private void updatePlayerState(Mark mark, int position) {
-        if (mark.getMarkType() == Mark.MarkType.X) {
-            xSet.add(position);
-        } else if (mark.getMarkType() == Mark.MarkType.O) {
-            oSet.add(position);
+    public void makeMove(Cell cell, int position) {
+        if (board[position] != Cell.EMPTY) {
+            throw new IllegalStateException("Already a mark here");
+        } else {
+            updatePlayerState(cell, position);
+            board[position] = cell;
+        }
+    }
+
+    private void updatePlayerState(Cell cell, int position) {
+        if (cell == Cell.CROSS) {
+            crossSet.add(position);
+        } else if (cell == Cell.NOUGHT) {
+            noughtSet.add(position);
         }
     }
 
     public boolean checkIfGameOverAndSetStatus() {
-        if (checkIfWinner(Mark.MarkType.X)) {
-            gameStatus = GameStatus.X_HAS_WON;
+        if (checkIfWinner(Cell.CROSS)) {
+            gameStatus = GameStatus.CROSS_WINS;
             return true;
-        } else if (checkIfWinner(Mark.MarkType.O)) {
-            gameStatus = GameStatus.O_HAS_WON;
+        } else if (checkIfWinner(Cell.NOUGHT)) {
+            gameStatus = GameStatus.NOUGHT_WINS;
             return true;
         } else if (isTie()) {
             gameStatus = GameStatus.TIE;
@@ -55,19 +59,18 @@ public class Board {
     }
 
     private boolean isTie() {
-        return (!Arrays.asList(board).contains(null));
+        return (!Arrays.asList(board).contains(Cell.EMPTY));
     }
 
-
-    private boolean checkIfWinner(Mark.MarkType markType) {
-        return containsSubSet(WINNING_COMBINATIONS, markType == Mark.MarkType.X ? xSet : oSet);
+    private boolean checkIfWinner(Cell cell) {
+        return containsSubSet(WINNING_COMBINATIONS, cell == Cell.CROSS ? crossSet : noughtSet);
     }
 
     public boolean containsSubSet(List<Set<Integer>> list, Set<Integer> targetSet) {
         return list.stream().anyMatch(targetSet::containsAll);
     }
 
-    public Mark[] getBoard() {
+    public Cell[] getBoard() {
         return board;
     }
 
@@ -77,14 +80,14 @@ public class Board {
 
     public enum GameStatus {
         RUNNING(null),
-        X_HAS_WON("Player X has won!"),
-        O_HAS_WON("Player O has won!"),
+        CROSS_WINS("Player X has won!"),
+        NOUGHT_WINS("Player O has won!"),
         TIE("Tie!");
 
-        private String message;
+        private final String message;
 
         GameStatus(String message) {
-
+            this.message=message;
         }
 
         public String getMessage() {
